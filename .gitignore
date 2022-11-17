@@ -1,0 +1,11 @@
+*/build/*
+*/cmake-build-debug/
+*/cmake-build-release/
+*/.vscode/.cortex-debug.peripherals.state.json
+*/*.DS_Store
+*/.DS_Store
+*/*.user
+*/*.DS_Store
+*/.DS_Store
+*/.vscode/targets.log
+*/.vscode/targets.log
