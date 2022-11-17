@@ -1,0 +1,6 @@
+[
+    {
+        "name": "GCC Arm Embedded",
+        "toolchainFile": "${env:Arduino_Core_Rudiron_Path}/arm-none-eabi-gcc.cmake"
+    }
+]

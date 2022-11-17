@@ -26,7 +26,7 @@ string(FIND "$ENV{Arduino_Core_Rudiron_Path}" "Arduino_Core_Rudiron" PROJECT_FOU
 if (${PROJECT_FOUND} MATCHES "-1")
     message("Arduino_Core_Rudiron_Path NOT FOUND. SPECIFY THE FULL PATH!")
     #при необходимости укажите полный путь к Arduino_Core_Rudiron
-    set(ARDUIRON_CORE_RUDIRON_PATH "/Users/daniilignatev/Desktop/Arduino_Core_Rudiron")
+    set(ARDUIRON_CORE_RUDIRON_PATH "/../Arduino_Core_Rudiron")
 
 else()
     #путь к проекту берется из системной переменной
@@ -61,7 +61,7 @@ set(board_name "Rudiron_Buterbrod")
 add_subdirectory("${ARDUIRON_CORE_RUDIRON_PATH}" Arduino_Core_Rudiron)
 
 # Название исполняемого файла
-set(OUTPUT_NAME "sketch.elf")
+set(OUTPUT_NAME "${PROJECT_NAME}.elf")
 
 # Поиск исходных файлов в корневом каталоге
 file(GLOB SKETCH_SOURCES

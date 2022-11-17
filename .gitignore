@@ -9,3 +9,6 @@
 */.DS_Store
 */.vscode/targets.log
 */.vscode/targets.log
+sketch/.vscode/dryrun.log
+sketch/.vscode/.cortex-debug.registers.state.json
+sketch/.vscode/configurationCache.log
