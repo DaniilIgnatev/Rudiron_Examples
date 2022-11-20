@@ -28,7 +28,6 @@ bool task_led2(void *)
     return true;
 }
 
-///Код выполняется один раз
 void setup()
 {
     setup_pinout();
@@ -74,7 +73,6 @@ void wellcome()
     Serial1.println("Рудирон Бутерброд!");
 }
 
-///Код выполняется многократно
 void loop()
 {
     pressed1 = digitalRead(BUTTON_BUILTIN_1);
