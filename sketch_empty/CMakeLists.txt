@@ -84,6 +84,7 @@ add_executable(${OUTPUT_NAME}
 
 # Флаги компиляции
 target_compile_definitions(${OUTPUT_NAME} PRIVATE
+	ARDUINO=101
         ${board_name}
         # USB_IRQ -- включает обработчик прерывания USB
         # HCLK_DISABLE -- работа от внутреннего кварцевого резонатора
