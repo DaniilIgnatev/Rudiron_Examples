@@ -6,8 +6,6 @@
 #define rightEngineFrontPin 14
 #define rightEngineBackPin 15
 
-using namespace Rudiron;
-
 void setup_driver()
 {
     pinMode(leftEngineFrontPin, OUTPUT);

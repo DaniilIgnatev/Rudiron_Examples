@@ -6,8 +6,6 @@
 #define IN_RIGHT 14
 #define PWM_RIGHT 15
 
-using namespace Rudiron;
-
 void configEngines()
 {
     pinMode(IN_LEFT, OUTPUT);

@@ -1,18 +1,7 @@
 #include "Arduino.h"
 #include "rudiron/nrf24.h"
 
-///Первая кнопка нажата
-bool pressed1 = false;
-
-///Вторая кнопка нажата
-bool pressed2 = false;
-
-///Третья кнопка нажата
-bool pressed3 = false;
-
-uint8_t package[3];
-
-///Устанавливаются режимы ввода-вывода для используемых пинов
+/// Устанавливаются режимы ввода-вывода для используемых пинов
 void setup_pinout()
 {
     pinMode(BUTTON_BUILTIN_1, INPUT_PULLDOWN);
@@ -23,7 +12,7 @@ void setup_pinout()
     pinMode(LED_BUILTIN_2, OUTPUT);
 }
 
-///Приветствие пользователя
+/// Приветствие пользователя
 void wellcome()
 {
     for (int i = 0; i < 3; i++)
@@ -40,37 +29,50 @@ void wellcome()
     Serial.println("РУДИРОН Бутерброд!");
 }
 
-void setup(){
+void setup()
+{
     setup_pinout();
     wellcome();
 
-    if (!nrf24.begin(false)){
+    if (!nrf24.begin(false))
+    {
         Serial.println("Nrf24 Error!");
         return;
     }
 }
 
-bool pressed2_last = false;
-bool isForwards = false;
+/// Первая кнопка нажата
+bool pressed1 = false;
 
-void loop(){
+/// Вторая кнопка нажата
+bool pressed2 = false;
+
+/// Третья кнопка нажата
+bool pressed3 = false;
+
+/// Счетчик пакетов
+int counter = 0;
+
+/// Буфер обмена
+uint8_t package[4];
+
+void loop()
+{
     pressed1 = digitalRead(BUTTON_BUILTIN_1);
     pressed2 = digitalRead(BUTTON_BUILTIN_2);
     pressed3 = digitalRead(BUTTON_BUILTIN_3);
 
-    package[1] = pressed1;
+    package[0] = pressed1;
+    package[1] = pressed2;
     package[2] = pressed3;
 
-    if (!pressed2_last && pressed2){
-        isForwards = !isForwards;
-        digitalWrite(LED_BUILTIN_1, !isForwards);
-        digitalWrite(LED_BUILTIN_2, isForwards);
-    }
-    pressed2_last = pressed2;
-    package[0] = isForwards;
-    
-    if (nrf24.availableForWrite()){
-        nrf24.write(package, 3);
+    digitalWrite(LED_BUILTIN_1, pressed2 || pressed1);
+    digitalWrite(LED_BUILTIN_2, pressed2 || pressed3);
+
+    if (nrf24.availableForWrite())
+    {
+        package[3] = counter++;
+        nrf24.write(package, 4);
     }
 
     delay(100);
