@@ -34,7 +34,7 @@
 #define SSID ""
 #define PASSWORD ""
 
-#define HOST_NAME "arduino.tips"
+#define HOST_NAME "142.251.33.68"
 #define HOST_PORT (80)
 
 ESP8266 wifi(&EspSerial);
@@ -104,10 +104,10 @@ void setup(void)
   ESP_AT_LIB_DEBUG_OUTPUT.println("Done");
 }
 
-//Буфер передатчика esp8266 = 2920 байт
-char requestStr[] = "GET /asciilogo.txt HTTP/1.1\r\nHost: arduino.tips\r\nConnection: close\r\n\r\n";
+// Буфер передатчика esp8266 = 2920 байт
+char requestStr[] = "GET /index.html HTTP/1.1\r\nHost: 142.251.33.68\r\nConnection: close\r\n\r\n";
 
-//Размер буфера приемника esp8266 = 1460 байт
+// Размер буфера приемника esp8266 = 1460 байт
 uint8_t buffer[1460] = {0};
 
 void loop(void)
