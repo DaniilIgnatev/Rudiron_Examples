@@ -31,8 +31,8 @@
 #include "ESP_AT_Lib.h"
 #include "ESP_AT_Debug.h"
 
-#define SSID ""
-#define PASSWORD ""
+#define SSID "ESP-01"
+#define PASSWORD "esp_password"
 
 #define HOST_PORT (80)
 
@@ -70,11 +70,11 @@ void setup(void)
       continue;
     }
 
-    if (wifi.joinAP(SSID, PASSWORD))
+    if (wifi.setSoftAPParam(SSID, PASSWORD))
     {
-      ESP_AT_LIB_DEBUG_OUTPUT.println("Connect to WiFi OK");
+      ESP_AT_LIB_DEBUG_OUTPUT.println("Host WiFi OK");
       ESP_AT_LIB_DEBUG_OUTPUT.print("IP: ");
-      ESP_AT_LIB_DEBUG_OUTPUT.println(wifi.getLocalIP().c_str());
+      ESP_AT_LIB_DEBUG_OUTPUT.println(wifi.getAPIp().c_str());
     }
     else
     {
@@ -128,10 +128,6 @@ void loop(void)
 
   if (len > 0)
   {
-    ESP_AT_LIB_DEBUG_OUTPUT.print("Status:[");
-    ESP_AT_LIB_DEBUG_OUTPUT.print(wifi.getIPStatus().c_str());
-    ESP_AT_LIB_DEBUG_OUTPUT.println("]");
-
     ESP_AT_LIB_DEBUG_OUTPUT.print("Received from :");
     ESP_AT_LIB_DEBUG_OUTPUT.println(mux_id);
     ESP_AT_LIB_DEBUG_OUTPUT.print("[");

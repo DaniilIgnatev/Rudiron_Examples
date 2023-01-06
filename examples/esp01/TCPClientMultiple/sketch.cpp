@@ -1,5 +1,5 @@
 /****************************************************************************************************************************
-  UDPClientSingle.ino
+  TCPClientMultiple.ino
   For ESP8266/ESP32-AT-command running shields
 
   ESP_AT_Lib is a wrapper library for the ESP8266/ESP32 AT-command shields
@@ -8,8 +8,8 @@
   Built by Khoi Hoang https://github.com/khoih-prog/ESP_AT_Lib
   Licensed under MIT license
 
-  @example UDPClientSingle.ino
-  @brief The UDPClientSingle demo of library WeeESP8266.
+  @example TCPClientMultiple.ino
+  @brief The TCPClientMultiple demo of library WeeESP8266.
   @author Wu Pengfei<pengfei.wu@itead.cc>
   @date 2015.02
 
@@ -47,24 +47,28 @@ void setup(void)
   }
 
 #if defined(BOARD_NAME)
-  ESP_AT_LIB_DEBUG_OUTPUT.println("\nStart UDPClientSingle on " + String(BOARD_NAME));
+  ESP_AT_LIB_DEBUG_OUTPUT.println("\nStart TCPClientMultiple on " + String(BOARD_NAME));
 #else
-  ESP_AT_LIB_DEBUG_OUTPUT.println("\nStart UDPClientSingle");
+  ESP_AT_LIB_DEBUG_OUTPUT.println("\nStart TCPClientMultiple");
 #endif
 
-  // initialize serial for ESP module
+  ESP_AT_LIB_DEBUG_OUTPUT.println(ESP_AT_LIB_VERSION);
+
+  // initialize ESP_AT_LIB_DEBUG_OUTPUT for ESP module
   EspSerial.begin(ESP_AT_BAUD);
 
   ESP_AT_LIB_DEBUG_OUTPUT.print("FW Version:");
   ESP_AT_LIB_DEBUG_OUTPUT.println(wifi.getVersion().c_str());
 
+  ESP_AT_LIB_DEBUG_OUTPUT.print("Set AP/STA Mode ");
+
   if (wifi.setOprToStationSoftAP())
   {
-    ESP_AT_LIB_DEBUG_OUTPUT.print("Set AP/STA Mode OK");
+    ESP_AT_LIB_DEBUG_OUTPUT.println("OK");
   }
   else
   {
-    ESP_AT_LIB_DEBUG_OUTPUT.print("Set AP/STA Mode failed");
+    ESP_AT_LIB_DEBUG_OUTPUT.println("failed");
   }
 
   bool connected = false;
@@ -72,7 +76,6 @@ void setup(void)
   while (!connected)
   {
     connected = wifi.joinAP(SSID, PASSWORD);
-    
     if (connected)
     {
       ESP_AT_LIB_DEBUG_OUTPUT.println("Connect to WiFi OK");
@@ -84,13 +87,15 @@ void setup(void)
       ESP_AT_LIB_DEBUG_OUTPUT.println("Connect to WiFi failed");
     }
 
-    if (wifi.disableMUX())
+    ESP_AT_LIB_DEBUG_OUTPUT.print("enableMUX ");
+
+    if (wifi.enableMUX())
     {
-      ESP_AT_LIB_DEBUG_OUTPUT.println("disableMUX OK");
+      ESP_AT_LIB_DEBUG_OUTPUT.println("OK");
     }
     else
     {
-      ESP_AT_LIB_DEBUG_OUTPUT.println("disableMUX failed");
+      ESP_AT_LIB_DEBUG_OUTPUT.println("failed");
     }
   }
 
@@ -100,34 +105,36 @@ void setup(void)
 void loop(void)
 {
   uint8_t buffer[128] = {0};
+  static uint8_t mux_id = 0;
 
-  ESP_AT_LIB_DEBUG_OUTPUT.print("Register UDP ");
+  ESP_AT_LIB_DEBUG_OUTPUT.print("Create TCP ");
+  ESP_AT_LIB_DEBUG_OUTPUT.print(mux_id);
 
-  if (wifi.registerUDP(HOST_NAME, HOST_PORT))
+  if (wifi.createTCP(mux_id, HOST_NAME, HOST_PORT))
   {
-    ESP_AT_LIB_DEBUG_OUTPUT.println("OK");
+    ESP_AT_LIB_DEBUG_OUTPUT.println(" OK");
   }
   else
   {
-    ESP_AT_LIB_DEBUG_OUTPUT.println("failed");
+    ESP_AT_LIB_DEBUG_OUTPUT.println(" failed");
   }
 
   char hello[] = "Hello, this is client!";
 
-  if (wifi.send((const uint8_t *)hello, strlen(hello)))
+  if (wifi.send(mux_id, (const uint8_t *)hello, strlen(hello)))
   {
     ESP_AT_LIB_DEBUG_OUTPUT.println("Send OK");
   }
   else
   {
-    ESP_AT_LIB_DEBUG_OUTPUT.println("Send failed");
+    ESP_AT_LIB_DEBUG_OUTPUT.println("Send err");
   }
 
-  uint32_t len = wifi.recv(buffer, sizeof(buffer), 10000);
+  uint32_t len = wifi.recv(mux_id, buffer, sizeof(buffer), 10000);
 
   if (len > 0)
   {
-    ESP_AT_LIB_DEBUG_OUTPUT.print("Received:\n[");
+    ESP_AT_LIB_DEBUG_OUTPUT.print("Received:[");
 
     for (uint32_t i = 0; i < len; i++)
     {
@@ -137,16 +144,24 @@ void loop(void)
     ESP_AT_LIB_DEBUG_OUTPUT.println("]");
   }
 
-  ESP_AT_LIB_DEBUG_OUTPUT.print("Unregister UDP ");
+  ESP_AT_LIB_DEBUG_OUTPUT.print("Release TCP ");
+  ESP_AT_LIB_DEBUG_OUTPUT.print(mux_id);
 
-  if (wifi.unregisterUDP())
+  if (wifi.releaseTCP(mux_id))
   {
-    ESP_AT_LIB_DEBUG_OUTPUT.println("OK");
+    ESP_AT_LIB_DEBUG_OUTPUT.println(" OK");
   }
   else
   {
-    ESP_AT_LIB_DEBUG_OUTPUT.println("failed");
+    ESP_AT_LIB_DEBUG_OUTPUT.println(" failed");
   }
 
   delay(5000);
+
+  mux_id++;
+
+  if (mux_id >= 5)
+  {
+    mux_id = 0;
+  }
 }
