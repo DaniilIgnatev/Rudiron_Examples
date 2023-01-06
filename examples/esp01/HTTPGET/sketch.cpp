@@ -34,7 +34,7 @@
 #define SSID ""
 #define PASSWORD ""
 
-#define HOST_NAME "142.251.33.68"
+#define HOST_NAME ""
 #define HOST_PORT (80)
 
 ESP8266 wifi(&EspSerial);

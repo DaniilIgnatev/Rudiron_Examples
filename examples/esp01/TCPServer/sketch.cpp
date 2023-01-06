@@ -44,7 +44,8 @@ void setup(void)
   {
     ESP_AT_LIB_DEBUG_OUTPUT.begin(115200);
     while (!ESP_AT_LIB_DEBUG_OUTPUT)
-      ;
+    {
+    }
 
 #if defined(BOARD_NAME)
     ESP_AT_LIB_DEBUG_OUTPUT.println("\nStart TCPServer on " + String(BOARD_NAME));
@@ -117,7 +118,7 @@ void setup(void)
 }
 void loop(void)
 {
-  //Размер буфера приемника esp8266 = 1460 байт
+  // Размер буфера приемника esp8266 = 1460 байт
   uint8_t buffer[1460] = {0};
 
   // id сокета
