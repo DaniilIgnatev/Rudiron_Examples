@@ -71,26 +71,33 @@ void setup(void)
     ESP_AT_LIB_DEBUG_OUTPUT.println("failed");
   }
 
-  if (wifi.joinAP(SSID, PASSWORD))
-  {
-    ESP_AT_LIB_DEBUG_OUTPUT.println("Connect to WiFi OK");
-    ESP_AT_LIB_DEBUG_OUTPUT.print("IP: ");
-    ESP_AT_LIB_DEBUG_OUTPUT.println(wifi.getLocalIP().c_str());
-  }
-  else
-  {
-    ESP_AT_LIB_DEBUG_OUTPUT.println("Connect to WiFi failed");
-  }
+  bool connected = false;
 
-  ESP_AT_LIB_DEBUG_OUTPUT.print("disableMUX ");
+  while (!connected)
+  {
+    connected = wifi.joinAP(SSID, PASSWORD);
 
-  if (wifi.disableMUX())
-  {
-    ESP_AT_LIB_DEBUG_OUTPUT.println("OK");
-  }
-  else
-  {
-    ESP_AT_LIB_DEBUG_OUTPUT.println("failed");
+    if (connected)
+    {
+      ESP_AT_LIB_DEBUG_OUTPUT.println("Connect to WiFi OK");
+      ESP_AT_LIB_DEBUG_OUTPUT.print("IP: ");
+      ESP_AT_LIB_DEBUG_OUTPUT.println(wifi.getLocalIP().c_str());
+    }
+    else
+    {
+      ESP_AT_LIB_DEBUG_OUTPUT.println("Connect to WiFi failed");
+    }
+
+    ESP_AT_LIB_DEBUG_OUTPUT.print("disableMUX ");
+
+    if (wifi.disableMUX())
+    {
+      ESP_AT_LIB_DEBUG_OUTPUT.println("OK");
+    }
+    else
+    {
+      ESP_AT_LIB_DEBUG_OUTPUT.println("failed");
+    }
   }
 
   ESP_AT_LIB_DEBUG_OUTPUT.println("Done");
