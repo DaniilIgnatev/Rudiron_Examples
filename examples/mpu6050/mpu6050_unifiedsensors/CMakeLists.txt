@@ -106,7 +106,7 @@ target_compile_options(${OUTPUT_NAME} PRIVATE
         "-ffunction-sections"
         "-fdata-sections"
          "-flto" # включает оптимизацию линковщика
-        "-fno-rtti" # отключает динамическую идентификацию типов данных
+        # "-fno-rtti" # отключает динамическую идентификацию типов данных
         "-fno-exceptions" # отключает обработку исключений с++
         )
 
@@ -129,7 +129,7 @@ target_link_options(${OUTPUT_NAME} PRIVATE
         "-Wl,--gc-sections"
         "-specs=nano.specs"
         "-ffreestanding"#Не делать предположений о значениях имен функций из стандартной библиотеки
-#         "-nostartfiles"#Предотвращает использование компилятором стандартных файлов запуска при компоновке
+        # "-nostartfiles"#Предотвращает использование компилятором стандартных файлов запуска при компоновке
         "-Wl,--print-memory-usage"
         )
 
