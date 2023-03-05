@@ -70,30 +70,46 @@ file(GLOB SKETCH_SOURCES
         )
 
 # Поиск исходных файлов в подкаталоге
-#file(GLOB SUBFOLDER_SOURCES
-#        подкаталог/*.c
-#        подкаталог/*.cpp
-#        )
+file(GLOB SKETCH_SUBFOLDER_SOURCES
+#        подкаталог/*
+)
 
 # Перечень путей к файлам исходного кода
 add_executable(${OUTPUT_NAME}
         ${ARDUIRON_CORE_RUDIRON_SOURCES}
         ${SKETCH_SOURCES}
-#        ${SUBFOLDER_SOURCES}
-        )
+        ${SKETCH_SUBFOLDER_SOURCES}
 
-# Флаги компиляции
-target_compile_definitions(${OUTPUT_NAME} PRIVATE
-	ARDUINO=101
-        ${board_name}
-        # USB_IRQ -- включает обработчик прерывания USB
-        # HCLK_DISABLE -- работа от внутреннего кварцевого резонатора
+        # Добавьте пути поиска исходных файлов здесь
+        ${SPI_sources}
+        ${Wire_sources}
+        ${MPU6050_sources}
+        ${Adafruit_BusIO_sources}
+        ${Adafruit_Unified_Sensor_sources}
+        ${Adafruit_MPU6050_sources}
         )
 
 # Перечень путей к файлам заголовков
 include_directories(
-    ${ARDUIRON_CORE_RUDIRON_INCLUDES}
-)
+        ${ARDUIRON_CORE_RUDIRON_INCLUDES}
+
+        # Добавьте пути поиска заголовков здесь
+        ${SPI_includes}
+        ${Wire_includes}
+        ${MPU6050_includes}
+        ${Adafruit_BusIO_includes}
+        ${Adafruit_Unified_Sensor_includes}
+        ${Adafruit_MPU6050_includes}
+        )
+
+# Флаги компиляции
+target_compile_definitions(${OUTPUT_NAME} PUBLIC
+	ARDUINO=101
+        ${board_name}
+        ${cpu_name}
+        # USB_IRQ -- включает обработчик прерывания USB
+        # HCLK_DISABLE -- работа от внутреннего кварцевого резонатора
+        )
 
 # Параметры компиляции
 target_compile_options(${OUTPUT_NAME} PRIVATE

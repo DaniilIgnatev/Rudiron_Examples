@@ -31,10 +31,10 @@
 #include "ESP_AT_Lib.h"
 #include "ESP_AT_Debug.h"
 
-#define SSID ""
-#define PASSWORD ""
+#define SSID "iPhone"
+#define PASSWORD "kazan116"
 
-#define HOST_NAME ""
+#define HOST_NAME "142.251.33.68"
 #define HOST_PORT (80)
 
 ESP8266 wifi(&EspSerial);

@@ -70,30 +70,41 @@ file(GLOB SKETCH_SOURCES
         )
 
 # Поиск исходных файлов в подкаталоге
-#file(GLOB SUBFOLDER_SOURCES
-#        подкаталог/*.c
-#        подкаталог/*.cpp
-#        )
+file(GLOB SKETCH_SUBFOLDER_SOURCES
+#        подкаталог/*
+        src/*
+)
 
 # Перечень путей к файлам исходного кода
 add_executable(${OUTPUT_NAME}
         ${ARDUIRON_CORE_RUDIRON_SOURCES}
         ${SKETCH_SOURCES}
-#        ${SUBFOLDER_SOURCES}
-        )
+        ${SKETCH_SUBFOLDER_SOURCES}
 
-# Флаги компиляции
-target_compile_definitions(${OUTPUT_NAME} PRIVATE
-	ARDUINO=101
-        ${board_name}
-        # USB_IRQ -- включает обработчик прерывания USB
-        # HCLK_DISABLE -- работа от внутреннего кварцевого резонатора
+        # Добавьте пути поиска исходных файлов здесь
+        ${nrf24l01_sources}
+        ${Servo_sources}
         )
 
 # Перечень путей к файлам заголовков
 include_directories(
-    ${ARDUIRON_CORE_RUDIRON_INCLUDES}
-)
+        ${ARDUIRON_CORE_RUDIRON_INCLUDES}
+        "src/"
+
+        # Добавьте пути поиска заголовков здесь
+        ${nrf24l01_includes}
+        ${Servo_includes}
+        )
+
+# Флаги компиляции
+target_compile_definitions(${OUTPUT_NAME} PUBLIC
+	ARDUINO=101
+        ${board_name}
+        ${cpu_name}
+        # USB_IRQ -- включает обработчик прерывания USB
+        # HCLK_DISABLE -- работа от внутреннего кварцевого резонатора
+        NRF24_USE
+        )
 
 # Параметры компиляции
 target_compile_options(${OUTPUT_NAME} PRIVATE

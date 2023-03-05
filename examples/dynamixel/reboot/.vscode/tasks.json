@@ -4,7 +4,7 @@
         {
             "type": "shell",
             "label": "Очистить каталог сборки",
-            "command": "rm -r build",
+            "command": "rm -r build;rm -r build-debug;",
             "options": {
                 "cwd": "${workspaceFolder}"
             },
@@ -69,7 +69,7 @@
         {
             "type": "shell",
             "label": "Отладка: собрать",
-            "command": "mkdir build; cmake -DCMAKE_BUILD_TYPE=Debug -G \"Ninja\" -S . -B build/; cmake --build build",
+            "command": "mkdir build-debug; cmake -DCMAKE_BUILD_TYPE=Debug -G \"Ninja\" -S . -B build-debug/; cmake --build build-debug",
             "group": {
                 "kind": "build",
             },
@@ -77,7 +77,7 @@
                 "base": "$gcc",
                 "fileLocation": [
                     "relative",
-                    "${workspaceFolder}/build"
+                    "${workspaceFolder}/build-debug"
                 ]
             },
             "presentation": {
