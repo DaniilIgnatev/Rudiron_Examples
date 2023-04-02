@@ -81,6 +81,7 @@ add_executable(${OUTPUT_NAME}
         ${SKETCH_SUBFOLDER_SOURCES}
 
         # Добавьте пути поиска исходных файлов здесь
+        ${SPI_sources}
         ${Wire_sources}
         ${Adafruit_BusIO_sources}
         ${Adafruit_GFX_Library_sources}
@@ -92,6 +93,7 @@ include_directories(
         ${ARDUIRON_CORE_RUDIRON_INCLUDES}
 
         # Добавьте пути поиска заголовков здесь
+        ${SPI_includes}
         ${Wire_includes}
         ${Adafruit_BusIO_includes}
         ${Adafruit_GFX_Library_includes}
