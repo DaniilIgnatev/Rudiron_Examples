@@ -4,6 +4,8 @@
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
 
+void printAvailableData(void);
+
 Adafruit_MPU6050 mpu;
 
 /* Create new sensor events */

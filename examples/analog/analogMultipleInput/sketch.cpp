@@ -31,5 +31,5 @@ void loop()
   Serial.print("A5 = ");
   Serial.println(sensorValueA5);
 
-  delay(1000);
+  delay(100);
 }

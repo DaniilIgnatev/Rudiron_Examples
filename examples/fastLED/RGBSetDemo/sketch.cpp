@@ -23,11 +23,11 @@ void loop()
     // let's set an led value
     leds[i] = CHSV(hue, 255, 120);
 
-    hue++;
+    hue += i % 2;// уменьшает скорость перемены цветов
 
     // now, let's first 20 leds to the top 20 leds,
     leds(NUM_LEDS / 2, NUM_LEDS - 1) = leds(NUM_LEDS / 2 - 1, 0);
 
-    FastLED.delay(2);
+    FastLED.delay(2);// задает частоту обновления счетодиодов
   }
 }

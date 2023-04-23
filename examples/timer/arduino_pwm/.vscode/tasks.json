@@ -1,0 +1,197 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "Очистить каталог сборки",
+            "command": "rm -r build;rm -r build-debug;",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build",
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ]
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            }
+        },
+        {
+            "type": "shell",
+            "label": "Выпуск: собрать",
+            "command": "mkdir build; cmake -DCMAKE_BUILD_TYPE=Release -G \"Ninja\" -S . -B build/; cmake --build build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}/build"
+                ]
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "type": "shell",
+            "label": "Выпуск: очистить и собрать",
+            "group": "build",
+            "dependsOn": [
+                "Очистить каталог сборки",
+                "Выпуск: собрать"
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            }
+        },
+        {
+            "type": "shell",
+            "label": "Отладка: собрать",
+            "command": "mkdir build-debug; cmake -DCMAKE_BUILD_TYPE=Debug -G \"Ninja\" -S . -B build-debug/; cmake --build build-debug",
+            "group": {
+                "kind": "build",
+            },
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}/build-debug"
+                ]
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "type": "shell",
+            "label": "Отладка: очистить и собрать",
+            "group": "build",
+            "dependsOn": [
+                "Очистить каталог сборки",
+                "Отладка: собрать"
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            }
+        },
+        {
+            "type": "shell",
+            "label": "Очистить флеш-память",
+            "command": "Rudiron Programmer",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "args": [
+                "${env:Arduino_Core_Rudiron_Path}/bootloader_1986be92qi.hex",
+                "build/Sketch.hex",
+                "--english",
+                "--verify_bootloader",
+                "--erase",
+                "--speed",
+                "16",
+            ],
+            "dependsOn": [
+                "Выпуск: собрать"
+            ],
+            "group": "none",
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            }
+        },
+        {
+            "type": "shell",
+            "label": "Загрузить в флеш-память",
+            "command": "Rudiron Programmer",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "args": [
+                "${env:Arduino_Core_Rudiron_Path}/bootloader_1986be92qi.hex",
+                "build/Sketch.hex",
+                "--english",
+                "--erase",
+                "--load",
+                "--run",
+                "--speed",
+                "16"
+            ],
+            "dependsOn": [
+                "Выпуск: собрать"
+            ],
+            "group": "none",
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            }
+        },
+        {
+            "type": "shell",
+            "label": "Запустить",
+            "command": "Rudiron Programmer",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "args": [
+                "${env:Arduino_Core_Rudiron_Path}/bootloader_1986be92qi.hex",
+                "build/Sketch.hex",
+                "--english",
+                "--run",
+                "--speed",
+                "0",
+            ],
+            "group": "none",
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            }
+        }
+    ]
+}
