@@ -10,10 +10,10 @@ void setup(){
 }
 
 void loop(){
-    servo.write(0);
+    servo.write(20);
     delay(2000);
     servo.write(90);
     delay(2000);
-    servo.write(180);
+    servo.write(160);
     delay(2000);
 }
