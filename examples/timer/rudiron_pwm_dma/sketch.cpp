@@ -63,7 +63,7 @@ void loop()
     {
         if (frequency <= frequency_step)
         {
-            frequency = 0;
+            frequency = frequency_step;
         }
         else
         {

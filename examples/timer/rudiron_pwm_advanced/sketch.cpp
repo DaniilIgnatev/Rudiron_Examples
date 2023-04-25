@@ -3,8 +3,6 @@
 
 #define PWM_PIN 8
 
-using namespace Rudiron;
-
 void setup()
 {
     // конфигурация последовательного порта
@@ -15,10 +13,14 @@ void setup()
 
 void loop()
 {
-    // запуск ШИМ с частотой 500 Гц с заполнением 1% (1/100) на одну секунду на выводе PWM_PIN
-    pwm(PWM_PIN, 490, 1, 100);
+    // Ссылка на первй таймер
+    Rudiron::Timer &timer = Rudiron::Timer::getTimer_by_name(Rudiron::Timer_1);
+    // Настройка таймера на частоту 1500 Гц
+    timer.setup(1500);
+    // запуск ШИМ с заполнением 1% (1/100) на одну секунду на выводе PWM_PIN
+    timer.PWM_start(Rudiron::GPIO::get_rudiron_gpio(PWM_PIN), 1, 100);
     // пауза программы на 1 секунду
     delay(1000);
     // остановка шим на выводе PWM_PIN
-    pinMode(PWM_PIN, OUTPUT);
+    timer.PWM_stop(Rudiron::GPIO::get_rudiron_gpio(PWM_PIN));
 }

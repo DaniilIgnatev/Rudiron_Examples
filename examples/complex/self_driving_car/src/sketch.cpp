@@ -1,6 +1,6 @@
 #include "navigation.h"
 
-//#define TESTS
+// #define TESTS
 
 #ifdef TESTS
 #include "tests.h"
@@ -11,6 +11,7 @@ bool button2 = false;
 
 void setup()
 {
+    Rudiron::CLK::setCPUSpeed(Rudiron::CLK_Speed::low);
     Serial.begin(115200);
     pinMode(BUTTON_BUILTIN_2, INPUT_PULLDOWN);
 
