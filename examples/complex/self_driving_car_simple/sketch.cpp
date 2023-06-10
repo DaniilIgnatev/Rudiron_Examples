@@ -1,47 +1,46 @@
 #include "Arduino.h"
-#include "drive.h"
-#include "ultrasonic.h"
-#include "servo_telegka.h"
+#include "driver.h"
+#include "rangefinder.h"
+#include "rotator.h"
 
 void setup()
 {
+    rotator_setup(); // настройка управлением ультразвуковым датчиком
+    driver_init();   // начальная настройка двигателей
 
-    ultrasonic_setup(); // настройка управлением ультразвуковым датчиком
-    drive_init();       // начальная настройке двигателей
-
-    servo_setup();      // настройка управления сервоприводом
-    stop_telegka(3000); // останавливаем тележку
-    servo_angle(90, 2000);
+    rotator_setup();   // настройка управления сервоприводом
+    driver_stop(3000); // останавливаем тележку
+    rotator_angle(90, 2000);
 }
 
-float right_distance; // расстояние справо от препятствия
-float left_distance;  // расстояние слева от препятствия
+float right_distance; // расстояние справо до препятствия
+float left_distance;  // расстояние слева до препятствия
 
 void loop()
 {
-    if (ultrasonic_distance() > 20.00) // измеряем расстояние и определяем расстояние
+    if (rangefinder_distance() > 20.00) // измеряем расстояние
     {
-        forward_telegka(70, 2000); // двигаемся прямо
+        driver_forward(70, 2000); // двигаемся прямо
     }
     else
     {
-        stop_telegka(1000); // если расстояние меньше 20 см то останавливаемся
+        driver_stop(1000); // если расстояние меньше 20 см, то останавливаемся
 
-        servo_angle(45, 1300);                  // поворачиваем на 45 вправо сервопривод
-        right_distance = ultrasonic_distance(); // измеряем расстояние справа
+        rotator_angle(45, 1300);                 // поворачиваем сервопривод на 45 градусов направо
+        right_distance = rangefinder_distance(); // измеряем расстояние справа
 
-        servo_angle(135, 1300);                 // поворот влево на 45 сервопривод
-        left_distance = ultrasonic_distance();  // измеряем расстояние слева
-        servo_angle(90, 1300);                  // устанавливаем сервопривод в нулевое положение
+        rotator_angle(135, 1300);               // поворачиваем сервопривод на 45 градусов налево
+        left_distance = rangefinder_distance(); // измеряем расстояние слева
+        rotator_angle(90, 1300);                // устанавливаем сервопривод в положение прямо
 
         if (right_distance > 20.00 && right_distance > left_distance)
         {
-            rotation_telegka(1, 70, 1300); // поворачиваем тележку вправо
+            driver_rotation(1, 70, 1300); // поворачиваем тележку направо
         }
 
         if (left_distance > 20.00 && left_distance > right_distance)
         {
-            rotation_telegka(0, 70, 1300); // поворачиваем тележку влево
+            driver_rotation(0, 70, 1300); // поворачиваем тележку налево
         }
     }
 }

@@ -5,7 +5,9 @@
 #define HCSR04_TRIG_PIN 31
 #define HCSR04_ECHO_PIN 32
 
-void ultrasonic_setup();     // инициализация ультразвукового датчика
-float ultrasonic_distance(); // измерение расстояния
+// инициализация ультразвукового датчика
+void rangefinder_setup();     
+ // измерение расстояния
+float rangefinder_distance();
 
 #endif
