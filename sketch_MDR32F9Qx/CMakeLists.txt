@@ -28,8 +28,7 @@ project(Sketch)
 # Задание конфигурации платы
 set(core M3)
 set(cpu_name "MDR32F9Qx")
-set(board_name "Rudiron_Buterbrod")
-
+set(board_name "Rudiron_Buterbrod_R9_16MHz")
 # Название исполняемого файла
 set(OUTPUT_NAME "${PROJECT_NAME}.elf")
 

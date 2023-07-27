@@ -41,7 +41,30 @@ def clear_project(project_abs_path):
     build.clear_project(project_abs_path)
 
 
+def fix_project(project_abs_path):
+    print('Found sketch in ' + project_abs_path)
+    path = os.path.join(project_abs_path, 'CMakeLists.txt')
+    print(path)
+    lines = []
+    with open(path, 'r', encoding='ISO-8859-1') as file:
+        lines = file.readlines()
+        line_id = None
+
+        for line_number, line in enumerate(lines, start=0):
+            if 'set(board_name "Rudiron_Buterbrod")'.lower() in line.lower():
+                line_id = line_number
+                break
+
+        if line_id != None:
+            lines[line_id] = 'set(board_name "Rudiron_Buterbrod_R9_16MHz")'
+    
+    with open(path, 'w', encoding='ISO-8859-1') as file:
+        file.writelines(lines)
+
+
 if __name__ == "__main__":
+    # traverse_directories(os.curdir, fix_project)
+
     traverse_directories(os.curdir, count_project)
     print(f"Found {projects_found} projects\n")
 
