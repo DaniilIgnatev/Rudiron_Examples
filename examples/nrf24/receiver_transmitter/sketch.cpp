@@ -50,14 +50,6 @@ void setup()
     wellcome();
 
     initRadio(true);
-
-    nRF24_SetRFChannel(124);
-
-    // Set data rate
-    nRF24_SetDataRate(nRF24_DR_250kbps);
-
-    // Set CRC scheme
-    nRF24_SetCRCScheme(nRF24_CRC_2byte);
 }
 
 /// Первая кнопка нажата
