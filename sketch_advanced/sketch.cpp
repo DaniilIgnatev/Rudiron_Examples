@@ -14,14 +14,14 @@ bool pressed2 = false;
 ///Третья кнопка нажата
 bool pressed3 = false;
 
-///Пример задачи моргания первым светодиодом
+/// Задача моргания первым светодиодом
 bool task_led1(void *)
 {
     digitalWrite(LED_BUILTIN_1, !digitalRead(LED_BUILTIN_1));
     return true;
 }
 
-///Пример задачи моргания вторым светодиодом
+/// Задача моргания вторым светодиодом
 bool task_led2(void *)
 {
     digitalWrite(LED_BUILTIN_2, !digitalRead(LED_BUILTIN_2));
@@ -35,12 +35,32 @@ void setup()
     wellcome();
 }
 
+/// @brief Обработчик нажатия первой кнопки 
+void BUTTON_1_callback(){
+
+}
+
+/// @brief Обработчик нажатия второй кнопки 
+void BUTTON_2_callback(){
+
+}
+
+/// @brief Обработчик нажатия третьей кнопки 
+void BUTTON_3_callback(){
+
+}
+
 ///Устанавливаются режимы ввода-вывода для используемых пинов
 void setup_pinout()
 {
     pinMode(BUTTON_BUILTIN_1, INPUT_PULLDOWN);
+    attachInterrupt(digitalPinToInterrupt(BUTTON_BUILTIN_1), BUTTON_1_callback);
+
     pinMode(BUTTON_BUILTIN_2, INPUT_PULLDOWN);
+    attachInterrupt(digitalPinToInterrupt(BUTTON_BUILTIN_2), BUTTON_2_callback);
+
     pinMode(BUTTON_BUILTIN_3, INPUT_PULLDOWN);
+    attachInterrupt(digitalPinToInterrupt(BUTTON_BUILTIN_3), BUTTON_3_callback);
 
     pinMode(LED_BUILTIN_1, OUTPUT);
     pinMode(LED_BUILTIN_2, OUTPUT);
@@ -67,15 +87,13 @@ void wellcome()
     }
 
     Serial.begin(115200);
-    Serial1.begin(115200);
-
     Serial.println("Рудирон Бутерброд!");
+
+    Serial1.begin(115200);
     Serial1.println("Рудирон Бутерброд!");
 }
 
 void loop()
 {
-    pressed1 = digitalRead(BUTTON_BUILTIN_1);
-    pressed2 = digitalRead(BUTTON_BUILTIN_2);
-    pressed3 = digitalRead(BUTTON_BUILTIN_3);
+    
 }
