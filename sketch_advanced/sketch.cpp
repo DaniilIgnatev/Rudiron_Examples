@@ -38,28 +38,19 @@ void setup()
 /// @brief Обработчик нажатия первой кнопки
 void BUTTON_1_callback()
 {
-    bool b = digitalRead(BUTTON_BUILTIN_1);
-    Serial.println("Button 1 pressed");
-    Serial.print(b, 2);
-    Serial.println();
+    Serial.println("Нажата кнопка 1");
 }
 
 /// @brief Обработчик нажатия второй кнопки
 void BUTTON_2_callback()
 {
-    bool b = digitalRead(BUTTON_BUILTIN_2);
-    Serial.println("Button 2 pressed");
-    Serial.print(b, 2);
-    Serial.println();
+    Serial.println("Нажата кнопка 2");
 }
 
 /// @brief Обработчик нажатия третьей кнопки
 void BUTTON_3_callback()
 {
-    bool b = digitalRead(BUTTON_BUILTIN_3);
-    Serial.println("Button 3 pressed");
-    Serial.print(b, 2);
-    Serial.println();
+    Serial.println("Нажата кнопка 3");
 }
 
 /// Устанавливаются режимы ввода-вывода для используемых пинов
@@ -78,7 +69,7 @@ void setup_pinout()
     pinMode(LED_BUILTIN_2, OUTPUT);
 }
 
-/// Настривается расписание вызовов функций
+/// Настройка расписания задач
 void setup_tasks()
 {
     tasksTimer.start_every_millis(1000, task_led1);
@@ -98,10 +89,10 @@ void wellcome()
         delay(100);
     }
 
-    Serial.begin(92160);
+    Serial.begin(115200);
     Serial.println("Рудирон Бутерброд!");
 
-    Serial1.begin(92160);
+    Serial1.begin(115200);
     Serial1.println("Рудирон Бутерброд!");
 }
 
