@@ -1,5 +1,5 @@
 #include "Arduino.h"
-#include "rudiron/nrf24.h"
+#include "nrf24.h"
 
 ///Первая кнопка нажата
 bool pressed1 = false;

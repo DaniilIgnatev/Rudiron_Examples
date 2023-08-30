@@ -1,5 +1,5 @@
 #include "Arduino.h"
-#include "rudiron/nrf24.h"
+#include "nrf24.h"
 #include "Adafruit_ST7735.h"
 #include "FreeSans9pt7b.h"
 

@@ -1,5 +1,5 @@
 #include "Arduino.h"
-#include "rudiron/nrf24.h"
+#include "nrf24.h"
 
 #define leftEngineFrontPin 12
 #define leftEngineBackPin 13
