@@ -98,7 +98,6 @@ target_compile_definitions(${OUTPUT_NAME} PUBLIC
         ${cpu_name}
         # USB_IRQ -- включает обработчик прерывания USB
         # HCLK_DISABLE -- работа от внутреннего кварцевого резонатора
-        NRF24_USE
         )
 
 # Параметры компиляции

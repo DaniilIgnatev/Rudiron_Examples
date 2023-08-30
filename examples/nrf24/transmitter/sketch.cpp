@@ -1,5 +1,5 @@
 #include "Arduino.h"
-#include "rudiron/nrf24.h"
+#include "nrf24.h"
 
 /// Устанавливаются режимы ввода-вывода для используемых пинов
 void setup_pinout()
