@@ -1,6 +1,6 @@
 #include "Arduino.h"
 #include "Adafruit_ST7735.h"
-#include "FreeSans9pt7b.h"
+#include "Fonts/FreeSans9pt7b.h"
 
 Adafruit_ST7735 tft(1, 4, 6);
 

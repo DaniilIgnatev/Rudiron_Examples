@@ -1,7 +1,7 @@
 #include "Arduino.h"
 #include "nrf24.h"
 #include "Adafruit_ST7735.h"
-#include "FreeSans9pt7b.h"
+#include "Fonts/FreeSans9pt7b.h"
 
 /// Устанавливаются режимы ввода-вывода для используемых пинов
 void setup_pinout()

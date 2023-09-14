@@ -13,7 +13,7 @@ def clear_cmake_project(project_abs_path: str):
         shutil.rmtree(build_debug_path)
 
 
-def build_cmake_project(project_path: str):
+def _build_cmake_project(project_path: str):
     build_path = f"{project_path}/build"
     if not os.path.exists(build_path):
         os.mkdir(build_path)
@@ -67,17 +67,13 @@ def build_cmake_project(project_abs_path):
     current_project_index += 1
 
     print(f"Building the project №{current_project_index} of {projects_found} found")
-    result_code = build_cmake_project(project_abs_path)
+    result_code = _build_cmake_project(project_abs_path)
     if result_code != 0:
         clear_cmake_project(project_abs_path)
-        result_code = build_cmake_project(project_abs_path)
+        result_code = _build_cmake_project(project_abs_path)
         if result_code != 0:
             print(f"Error compiling project: {project_abs_path}")
             exit(-1)
-
-
-def clear_cmake_project(project_abs_path):
-    clear_cmake_project(project_abs_path)
 
 
 def fix_cmakelists(project_abs_path):
@@ -123,12 +119,20 @@ def generate_ino_project(project_abs_path):
     path_cpp = os.path.join(project_abs_path, sketch_name + ".cpp")
 
     path_ino_folder = os.path.join(project_abs_path, sketch_name)
-    if not os.path.exists(path_ino_folder):
-        os.mkdir(path_ino_folder)
+    if os.path.exists(path_ino_folder):
+        shutil.rmtree(path_ino_folder)
+    shutil.copytree(project_abs_path, path_ino_folder)
 
     path_ino = os.path.join(path_ino_folder, sketch_name + ".ino")
-    if not os.path.exists(path_ino):
-        shutil.copy(path_cpp, path_ino)
+    shutil.copy(path_cpp, path_ino)
+
+    path_ino_cpp = os.path.join(path_ino_folder, sketch_name + ".cpp")
+    if os.path.exists(path_ino_cpp):
+        os.remove(path_ino_cpp)
+    
+    path_CMakeLists = os.path.join(path_ino_folder, "CMakeLists.txt")
+    if os.path.exists(path_CMakeLists):
+        os.remove(path_CMakeLists)
 
 
 def build_ino_project(project_abs_path):
@@ -175,17 +179,17 @@ if __name__ == "__main__":
     traverse_directories(os.curdir, generate_ino_project)
     print("Ended generating ino projects")
 
-    # print("Started building arduino projects")
-    # traverse_directories(os.curdir, build_ino_project)
-    # print("Ended building arduino projects")
+    print("Started building arduino projects")
+    traverse_directories(os.curdir, build_ino_project)
+    print("Ended building arduino projects")
 
     print("Started clear arduino projects")
     traverse_directories(os.curdir, clear_ino_project)
     print("Ended clear arduino projects")
 
-    # print("Started building cmake projects")
-    # traverse_directories(os.curdir, build_cmake_project)
-    # print("Ended buildin cmake projects")
+    print("Started building cmake projects")
+    traverse_directories(os.curdir, build_cmake_project)
+    print("Ended buildin cmake projects")
 
     print("Started clear cmake projects")
     traverse_directories(os.curdir, clear_cmake_project)

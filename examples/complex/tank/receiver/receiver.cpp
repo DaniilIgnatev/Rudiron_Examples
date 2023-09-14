@@ -14,7 +14,7 @@ void setup_driver()
     pinMode(rightEngineBackPin, OUTPUT);
 }
 
-///Устанавливаются режимы ввода-вывода для используемых пинов
+/// Устанавливаются режимы ввода-вывода для используемых пинов
 void setup_pinout()
 {
     pinMode(BUTTON_BUILTIN_1, INPUT_PULLDOWN);
@@ -27,7 +27,7 @@ void setup_pinout()
     setup_driver();
 }
 
-///Приветствие пользователя
+/// Приветствие пользователя
 void wellcome()
 {
     for (int i = 0; i < 3; i++)
@@ -58,6 +58,7 @@ void setup()
 
 struct TankMovementModel
 {
+public:
     bool isForwards = false;
     bool leftActive = false;
     bool rightActive = false;
@@ -66,6 +67,25 @@ struct TankMovementModel
     bool leftEngineBack = false;
     bool rightEngineFront = false;
     bool rightEngineBack = false;
+
+    TankMovementModel(bool isForwards = false,
+                      bool leftActive = false,
+                      bool rightActive = false,
+
+                      bool leftEngineFront = false,
+                      bool leftEngineBack = false,
+                      bool rightEngineFront = false,
+                      bool rightEngineBack = false)
+    {
+        this->isForwards = isForwards;
+        this->leftActive = leftActive;
+        this->rightActive = rightActive;
+
+        this->leftEngineFront = leftEngineFront;
+        this->leftEngineBack = leftEngineBack;
+        this->rightEngineFront = rightEngineFront;
+        this->rightEngineBack = rightEngineBack;
+    }
 };
 
 TankMovementModel model;
