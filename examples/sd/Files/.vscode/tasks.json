@@ -114,7 +114,7 @@
                 "cwd": "${workspaceFolder}"
             },
             "args": [
-                "${env:Arduino_Core_Rudiron_Path}/bootloader_1986be92qi.hex",
+                "${env:Arduino_Core_Rudiron}/bootloaders/bootloader_default.hex",
                 "build/Sketch.hex",
                 "--english",
                 "--verify_bootloader",
@@ -144,7 +144,7 @@
                 "cwd": "${workspaceFolder}"
             },
             "args": [
-                "${env:Arduino_Core_Rudiron_Path}/bootloader_1986be92qi.hex",
+                "${env:Arduino_Core_Rudiron}/bootloaders/bootloader_default.hex",
                 "build/Sketch.hex",
                 "--english",
                 "--erase",
@@ -175,7 +175,7 @@
                 "cwd": "${workspaceFolder}"
             },
             "args": [
-                "${env:Arduino_Core_Rudiron_Path}/bootloader_1986be92qi.hex",
+                "${env:Arduino_Core_Rudiron}/bootloaders/bootloader_default.hex",
                 "build/Sketch.hex",
                 "--english",
                 "--run",

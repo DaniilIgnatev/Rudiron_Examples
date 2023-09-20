@@ -1,0 +1,5 @@
+Wire
+SPI
+Adafruit_BusIO
+Adafruit_GFX_Library
+Adafruit_ST7735_and_ST7789_Library

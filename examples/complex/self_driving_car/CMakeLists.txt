@@ -16,35 +16,43 @@
 cmake_minimum_required(VERSION 3.15.3)
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 
+
+# Задание конфигурации платы
+set(platform "MDR32F9Qx")
+set(board_name "Rudiron_Buterbrod_R9_16MHz")
+set(f_cpu "64000000")
+
+
 # Генератор проекта
 set(CMAKE_GENERATOR "Ninja")
 #set (CMAKE_GENERATOR "Unix Makefiles" CACHE INTERNAL "" FORCE)
 message("Generator is set to ${CMAKE_GENERATOR}")
 
+
 # Определение пути до библиотеки
-string(FIND "$ENV{Arduino_Core_Rudiron_Path}" "Arduino_Core_Rudiron" PROJECT_FOUND)
-if (${PROJECT_FOUND} MATCHES "-1")
-    message("Arduino_Core_Rudiron_Path NOT FOUND. SPECIFY THE FULL PATH!")
+set(ARDUIRON_CORE_RUDIRON $ENV{Arduino_Core_Rudiron})
+
+if(ARDUIRON_CORE_RUDIRON STREQUAL "")
+    message("Arduino_Core_Rudiron NOT FOUND. SPECIFY THE FULL PATH!")
     #при необходимости укажите полный путь к Arduino_Core_Rudiron
-    set(ARDUIRON_CORE_RUDIRON_PATH "/../Arduino_Core_Rudiron")
-
-else()
-    #путь к проекту берется из системной переменной
-    set(ARDUIRON_CORE_RUDIRON_PATH $ENV{Arduino_Core_Rudiron_Path})
+    set(ARDUIRON_CORE_RUDIRON "/../Arduino_Core_Rudiron")
 endif ()
-string(REPLACE "\\" "/" ARDUIRON_CORE_RUDIRON_PATH "${ARDUIRON_CORE_RUDIRON_PATH}")
-message(ARDUIRON_CORE_RUDIRON_PATH = "${ARDUIRON_CORE_RUDIRON_PATH}")
 
-# Путь до тулчейна
-set(CMAKE_TOOLCHAIN_FILE "${ARDUIRON_CORE_RUDIRON_PATH}/arm-none-eabi-gcc.cmake")
+string(REPLACE "\\" "/" ARDUIRON_CORE_RUDIRON "${ARDUIRON_CORE_RUDIRON}")
+message(STATUS "ARDUIRON_CORE_RUDIRON PATH = ${ARDUIRON_CORE_RUDIRON}")
 
+
+# Компилятор
+set(CMAKE_TOOLCHAIN_FILE "${ARDUIRON_CORE_RUDIRON}/arm-none-eabi-gcc.cmake")
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 enable_language(C ASM)
 
+
 # Название проекта
 project(Sketch)
+set(OUTPUT_NAME "${PROJECT_NAME}.elf")
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose Release or Debug" FORCE)
@@ -52,15 +60,76 @@ else()
     message("Build type = ${CMAKE_BUILD_TYPE}")
 endif()
 
-# Задание конфигурации платы
-set(core M3)
-set(cpu_name "MDR32F9Qx")
-set(board_name "Rudiron_Buterbrod_R9_16MHz")
-# Импорт библиотеки
-add_subdirectory("${ARDUIRON_CORE_RUDIRON_PATH}" Arduino_Core_Rudiron)
 
-# Название исполняемого файла
-set(OUTPUT_NAME "${PROJECT_NAME}.elf")
+# Стандартные пути core
+set(core_path "${ARDUIRON_CORE_RUDIRON}/cores/arduino")
+set(core_path_rudiron "${core_path}/rudiron")
+set(core_path_system "${core_path}/system")
+set(core_path_system_CMSIS_Source "${core_path_system}/CMSIS/Source")
+set(core_path_system_CMSIS_Include "${core_path_system}/CMSIS/Include")
+set(core_path_system_StdPeriph_Driver_src "${core_path_system}/StdPeriph_Driver/src")
+set(core_path_system_StdPeriph_Driver_inc "${core_path_system}/StdPeriph_Driver/inc")
+set(core_path_system_StdPeriph_Driver_src_USB_Library "${core_path_system_StdPeriph_Driver_src}/USB_Library")
+set(core_path_system_StdPeriph_Driver_inc_USB_Library "${core_path_system_StdPeriph_Driver_inc}/USB_Library")
+
+
+# Перечень исходных файлов core
+file(GLOB_RECURSE core_sources
+        ${core_path}/*
+        ${core_path_rudiron}/*
+        ${core_path_system}/*
+        ${core_path_system_CMSIS_Source}/*
+        ${core_path_system_StdPeriph_Driver_src}/*
+        ${core_path_system_StdPeriph_Driver_src_USB_Library}/*
+)
+
+# Перечень путей к файлам заголовков core
+set(core_includes
+        ${core_path}
+        ${core_path_rudiron}
+        ${core_path_system}
+        ${core_path_system_CMSIS_Include}
+        ${core_path_system_StdPeriph_Driver_inc}
+        ${core_path_system_StdPeriph_Driver_inc_USB_Library}
+)
+
+# Стандартные пути variant
+set(variant_path "${ARDUIRON_CORE_RUDIRON}/variants/${board_name}")
+
+# Перечень исходных файлов variant
+file(GLOB_RECURSE variant_sources
+        ${variant_path}/*
+)
+
+# Перечень путей к файлам заголовков variant
+set(variant_includes
+        ${variant_path}
+)
+
+
+# Путь до скрипта линковщика
+set(LINKER_FILE "${core_path_system}/linker_scripts/${platform}.ld")
+
+# Путь до корневой папки библиотек
+set(libraries_path "${ARDUIRON_CORE_RUDIRON}/libraries")
+
+
+# Подключение запрошенных библиотек
+file(STRINGS libraries.txt library_names)
+set(libraries_includes "")
+set(libraries_sources "")
+
+foreach(lib_name ${library_names})
+        set(modified_path "${libraries_path}/${lib_name}")
+        list(APPEND libraries_includes ${modified_path})
+
+        file(GLOB_RECURSE lib_sources
+                ${modified_path}/*.c
+                ${modified_path}/*.cpp
+        )
+        list(APPEND libraries_sources ${lib_sources})
+endforeach()
+
 
 # Поиск исходных файлов в корневом каталоге
 file(GLOB SKETCH_SOURCES
@@ -69,55 +138,70 @@ file(GLOB SKETCH_SOURCES
         )
 
 # Поиск исходных файлов в подкаталоге
+set(subfolder_path "subfolder")
 file(GLOB SKETCH_SUBFOLDER_SOURCES
-#        подкаталог/*
-        src/*
+        subfolder/*.c
+        subfolder/*.cpp
 )
+
 
 # Перечень путей к файлам исходного кода
 add_executable(${OUTPUT_NAME}
-        ${ARDUIRON_CORE_RUDIRON_SOURCES}
         ${SKETCH_SOURCES}
         ${SKETCH_SUBFOLDER_SOURCES}
+        
+        ${core_sources}
+        ${variant_sources}
 
         # Добавьте пути поиска исходных файлов здесь
-        ${nrf24l01_sources}
-        ${Servo_sources}
-        )
+        ${libraries_sources}
+)
+
 
 # Перечень путей к файлам заголовков
 include_directories(
-        ${ARDUIRON_CORE_RUDIRON_INCLUDES}
-        "src/"
+        ${subfolder_path}
+
+        ${core_includes}
+        ${variant_includes}
 
         # Добавьте пути поиска заголовков здесь
-        ${nrf24l01_includes}
-        ${Servo_includes}
-        )
+        ${libraries_includes}
+)
+
 
 # Флаги компиляции
 target_compile_definitions(${OUTPUT_NAME} PUBLIC
-	ARDUINO=101
-        ${board_name}
-        ${cpu_name}
         # USB_IRQ -- включает обработчик прерывания USB
         # HCLK_DISABLE -- работа от внутреннего кварцевого резонатора
-        NRF24_USE
         )
 
 # Параметры компиляции
 target_compile_options(${OUTPUT_NAME} PRIVATE
-        "-mcpu=cortex-${core}"
-        "-DUSE_${cpu_name}"
-        "-D__STARTUP_CLEAR_BSS"
-        "-D_start=main"
-        "-pipe"
+        "-c"
+        "-mcpu=cortex-m3"
         "-mthumb"
-        "-ffunction-sections"
-        "-fdata-sections"
-         "-flto" # включает оптимизацию линковщика
-        # "-fno-rtti" # отключает динамическую идентификацию типов данных
-        "-fno-exceptions" # отключает обработку исключений с++
+        "-gdwarf-2"# generate debugging information in the DWARF 2 format.
+        "-MD"# automatically generate a list of dependencies
+        "-MMD"# behaves similarly to -MD but does not list system headers as dependencies
+        "-MP"# to generate "phantom" targets for all the prerequisites in the dependency file
+        # "-MF"
+        # "-Wall"
+        "-mapcs-frame"# the compiler generates stack frames in a manner consistent with the ARM Procedure Call Standard
+        "-mthumb-interwork"# can safely call ARM state functions from Thumb state and vice versa
+        "-fdata-sections"# the compiler will place each data item into its own individual section in the output
+        "-ffunction-sections"# the compiler places each function into its own individual section in the output
+        "-D__STARTUP_CLEAR_BSS"# clear bss bytes
+        "-D_start=main"# entry point
+        "-pipe"# GCC uses pipes instead of temporary files to communicate between the various stages of the compilation
+        "-std=c++11"# c++ standart
+        "-fno-exceptions"# to disable exception handling in C++ programs
+        # "-fno-threadsafe-statics"# tells the compiler not to generate the extra code required to ensure that the local static variable initialization is thread-safe
+        "-DUSE_${platform}"# arduino platform name
+        "-DF_CPU=${f_cpu}"# arduino cpu max frequency
+        "-DARDUINO=10607"# arduino version
+        "-DARDUINO_${board_name}"# arduino board name
+        "-DARDUINO_ARCH_${platform}"# arduino arch name
         )
 
 # Уровни оптимизации
@@ -128,20 +212,28 @@ if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
             )
 else()
     target_compile_options(${OUTPUT_NAME} PRIVATE
-            "-O2"
+            "-Os"
             )
 endif()
 
 # Параметры компоновки
 target_link_options(${OUTPUT_NAME} PRIVATE
-        "-T${ARDUINO_CORE_RUDIRON_LINKER_FILE}"
-        "-mcpu=cortex-${core}"
-        "-Wl,--gc-sections"
-        "-specs=nano.specs"
-        "-ffreestanding"#Не делать предположений о значениях имен функций из стандартной библиотеки
-        # "-nostartfiles"#Предотвращает использование компилятором стандартных файлов запуска при компоновке
+        "-mcpu=cortex-m3"
+        "-T${LINKER_FILE}"
+        "-lc"# link against libc.a or libc.so
+        "-lstdc++"# link against libstdc++.a or libstdc++.so
+        "-lm"# link against libm.a or libm.so
+        "-lgcc"# link againgst libgcc.a or libgcc.so
+        "--specs=nano.specs"# to request the use of the "nano" version of the C library (libc)
         "-Wl,--print-memory-usage"
-        )
+        # "-Wl,--cref"
+        "-Wl,--check-sections"
+        "-Wl,--gc-sections"
+        "-Wl,--unresolved-symbols=report-all"
+        "-Wl,--warn-common"
+        "-Wl,--warn-section-align"
+        "-ffreestanding"
+)
 
 # Постобработка прошивки
 add_custom_command(TARGET ${OUTPUT_NAME}
@@ -151,6 +243,6 @@ add_custom_command(TARGET ${OUTPUT_NAME}
         COMMAND ${CMAKE_OBJCOPY} -O binary ${OUTPUT_NAME} ${PROJECT_NAME}.bin)
 
 # Вывод информации о размере памяти для продвинутых пользователей
-# add_custom_command(TARGET ${OUTPUT_NAME}
-# POST_BUILD
-# COMMAND ${CMAKE_SIZE_UTIL} ${OUTPUT_NAME})
+add_custom_command(TARGET ${OUTPUT_NAME}
+POST_BUILD
+COMMAND ${CMAKE_SIZE_UTIL} ${OUTPUT_NAME})

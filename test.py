@@ -1,6 +1,7 @@
 import os
 import shutil
 import subprocess
+from distutils.dir_util import copy_tree
 
 
 def clear_cmake_project(project_abs_path: str):
@@ -76,25 +77,36 @@ def build_cmake_project(project_abs_path):
             exit(-1)
 
 
+reference_sketch = os.path.abspath("templates/basic")
+reference_cmakelists = os.path.join(reference_sketch, "CMakeLists.txt")
+
 def fix_cmakelists(project_abs_path):
     print("Found sketch in " + project_abs_path)
-    path = os.path.join(project_abs_path, "CMakeLists.txt")
-    print(path)
-    lines = []
-    with open(path, "r", encoding="ISO-8859-1") as file:
-        lines = file.readlines()
-        line_id = None
+    if project_abs_path == reference_sketch:
+        return
+    
+    cmakelists_path = os.path.join(project_abs_path, "CMakeLists.txt")
+    if os.path.exists(cmakelists_path):
+        os.remove(cmakelists_path)
+    
+    shutil.copy(reference_cmakelists, cmakelists_path)
 
-        for line_number, line in enumerate(lines, start=0):
-            if 'set(board_name "Rudiron_Buterbrod")'.lower() in line.lower():
-                line_id = line_number
-                break
+    libraries_path = os.path.join(project_abs_path, "libraries.txt")
+    if not os.path.exists(libraries_path):
+        open(libraries_path, 'a').close()
 
-        if line_id != None:
-            lines[line_id] = 'set(board_name "Rudiron_Buterbrod_R9_16MHz")'
 
-    with open(path, "w", encoding="ISO-8859-1") as file:
-        file.writelines(lines)
+reference_vscode = os.path.join(reference_sketch, ".vscode")
+def fix_vscode(project_abs_path):
+    print("Found sketch in " + project_abs_path)
+    if project_abs_path == reference_sketch:
+        return
+
+    vscode_path = os.path.join(project_abs_path, ".vscode")
+    if os.path.exists(vscode_path):
+        shutil.rmtree(vscode_path)
+    
+    copy_tree(reference_vscode, vscode_path)
 
 
 def rename_cpp_sketch(project_abs_path):
@@ -166,14 +178,23 @@ def clear_ino_project(project_abs_path):
 
 
 if __name__ == "__main__":
-    # traverse_directories(os.curdir, fix_cmakelists)
-
     traverse_directories(os.curdir, count_project)
     print(f"Found {projects_found} projects\n")
+
+    # traverse_directories(os.curdir, fix_cmakelists)
+    # traverse_directories(os.curdir, fix_vscode)
 
     # print("Started renaming projects")
     # traverse_directories(os.curdir, rename_cpp_sketch)
     # print("Ended renaming projects")
+
+    print("Started building cmake projects")
+    traverse_directories(os.curdir, build_cmake_project)
+    print("Ended buildin cmake projects")
+
+    print("Started clear cmake projects")
+    traverse_directories(os.curdir, clear_cmake_project)
+    print("Ended clear cmake projects")
 
     print("Started generating ino projects")
     traverse_directories(os.curdir, generate_ino_project)
@@ -183,14 +204,6 @@ if __name__ == "__main__":
     traverse_directories(os.curdir, build_ino_project)
     print("Ended building arduino projects")
 
-    print("Started clear arduino projects")
-    traverse_directories(os.curdir, clear_ino_project)
-    print("Ended clear arduino projects")
-
-    print("Started building cmake projects")
-    traverse_directories(os.curdir, build_cmake_project)
-    print("Ended buildin cmake projects")
-
-    print("Started clear cmake projects")
-    traverse_directories(os.curdir, clear_cmake_project)
-    print("Ended clear cmake projects")
+    # print("Started clear arduino projects")
+    # traverse_directories(os.curdir, clear_ino_project)
+    # print("Ended clear arduino projects")
