@@ -1,4 +1,5 @@
 import os
+import platform
 import shutil
 import subprocess
 from distutils.dir_util import copy_tree
@@ -21,7 +22,6 @@ def _build_cmake_project(project_path: str):
         os.mkdir(build_path)
 
     cmake_path = "cmake"
-
     home_path = str(Path.home())
 
     os_type = platform.system()
@@ -146,6 +146,7 @@ def generate_ino_project(project_abs_path):
     path_ino_folder = os.path.join(project_abs_path, sketch_name)
     if os.path.exists(path_ino_folder):
         shutil.rmtree(path_ino_folder)
+        
     shutil.copytree(project_abs_path, path_ino_folder)
 
     path_ino = os.path.join(path_ino_folder, sketch_name + ".ino")
@@ -217,6 +218,6 @@ if __name__ == "__main__":
     traverse_directories(os.curdir, build_ino_project)
     print("Ended building arduino projects")
 
-    # print("Started clear arduino projects")
-    # traverse_directories(os.curdir, clear_ino_project)
-    # print("Ended clear arduino projects")
+    print("Started clear arduino projects")
+    traverse_directories(os.curdir, clear_ino_project)
+    print("Ended clear arduino projects")

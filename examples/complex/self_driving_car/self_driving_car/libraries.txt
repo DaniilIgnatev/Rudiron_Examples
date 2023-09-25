@@ -1,2 +1,0 @@
-nrf24l01
-Servo

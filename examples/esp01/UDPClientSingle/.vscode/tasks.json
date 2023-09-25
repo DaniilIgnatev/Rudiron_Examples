@@ -4,7 +4,7 @@
         {
             "type": "shell",
             "label": "Очистить каталог сборки",
-            "command": "rm -r build;rm -r build-debug;",
+            "command": "rm -r build; rm -r build-debug;",
             "options": {
                 "cwd": "${workspaceFolder}"
             },
@@ -18,17 +18,26 @@
             },
             "presentation": {
                 "echo": true,
-                "reveal": "always",
+                "reveal": "never",
                 "focus": false,
                 "panel": "shared",
-                "showReuseMessage": true,
-                "clear": true
-            }
+                "showReuseMessage": false,
+                "clear": true,
+            },
         },
         {
             "type": "shell",
             "label": "Выпуск: собрать",
-            "command": "mkdir build; cmake -DCMAKE_BUILD_TYPE=Release -G \"Ninja\" -S . -B build/; cmake --build build",
+            "command": "",
+            "windows": {
+                "command": "mkdir build; ${userHome}/AppData/Local/Arduino15/packages/Rudiron/tools/cmake/default/bin/cmake.exe -DCMAKE_BUILD_TYPE=Release -G \"Ninja\" -S . -B build/; ${userHome}/AppData/Local/Arduino15/packages/Rudiron/tools/cmake/default/bin/cmake.exe --build build;"
+            },
+            "osx": {
+                "command": ""
+            },
+            "linux": {
+                "command": ""
+            },
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -51,27 +60,19 @@
         },
         {
             "type": "shell",
-            "label": "Выпуск: очистить и собрать",
-            "group": "build",
-            "dependsOn": [
-                "Очистить каталог сборки",
-                "Выпуск: собрать"
-            ],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": true
-            }
-        },
-        {
-            "type": "shell",
             "label": "Отладка: собрать",
-            "command": "mkdir build-debug; cmake -DCMAKE_BUILD_TYPE=Debug -G \"Ninja\" -S . -B build-debug/; cmake --build build-debug",
+            "command": "",
+            "windows": {
+                "command": "mkdir build-debug; ${userHome}/AppData/Local/Arduino15/packages/Rudiron/tools/cmake/default/bin/cmake.exe -DCMAKE_BUILD_TYPE=Debug -G \"Ninja\" -S . -B build-debug/; ${userHome}/AppData/Local/Arduino15/packages/Rudiron/tools/cmake/default/bin/cmake.exe --build build-debug;"
+            },
+            "osx": {
+                "command": ""
+            },
+            "linux": {
+                "command": ""
+            },
             "group": {
-                "kind": "build",
+                "kind": "build"
             },
             "problemMatcher": {
                 "base": "$gcc",
@@ -91,37 +92,29 @@
         },
         {
             "type": "shell",
-            "label": "Отладка: очистить и собрать",
-            "group": "build",
-            "dependsOn": [
-                "Очистить каталог сборки",
-                "Отладка: собрать"
-            ],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": true
-            }
-        },
-        {
-            "type": "shell",
             "label": "Очистить флеш-память",
-            "command": "Rudiron Programmer",
+            "command": "",
+            "windows": {
+                "command": "${userHome}/AppData/Local/Arduino15/packages/Rudiron/tools/Rudiron Programmer/default/Rudiron Programmer",
+                "args": [
+                    "${userHome}/AppData/Local/Arduino15/packages/Rudiron/hardware/MDR32F9Qx/2.1.0/bootloaders/bootloader_default.hex",
+                    "build/Sketch.hex",
+                    "--english",
+                    "--verify_bootloader",
+                    "--erase",
+                    "--speed",
+                    "8"
+                ]
+            },
+            "osx": {
+                "command": ""
+            },
+            "linux": {
+                "command": ""
+            },
             "options": {
                 "cwd": "${workspaceFolder}"
             },
-            "args": [
-                "${env:Arduino_Core_Rudiron}/bootloaders/bootloader_default.hex",
-                "build/Sketch.hex",
-                "--english",
-                "--verify_bootloader",
-                "--erase",
-                "--speed",
-                "16",
-            ],
             "dependsOn": [
                 "Выпуск: собрать"
             ],
@@ -139,20 +132,26 @@
         {
             "type": "shell",
             "label": "Загрузить в флеш-память",
-            "command": "Rudiron Programmer",
-            "options": {
-                "cwd": "${workspaceFolder}"
+            "command": "",
+            "windows": {
+                "command": "${userHome}/AppData/Local/Arduino15/packages/Rudiron/tools/Rudiron Programmer/default/Rudiron Programmer",
+                "args": [
+                    "${userHome}/AppData/Local/Arduino15/packages/Rudiron/hardware/MDR32F9Qx/2.1.0/bootloaders/bootloader_default.hex",
+                    "build/Sketch.hex",
+                    "--english",
+                    "--erase",
+                    "--load",
+                    "--run",
+                    "--speed",
+                    "8"
+                ]
             },
-            "args": [
-                "${env:Arduino_Core_Rudiron}/bootloaders/bootloader_default.hex",
-                "build/Sketch.hex",
-                "--english",
-                "--erase",
-                "--load",
-                "--run",
-                "--speed",
-                "16"
-            ],
+            "osx": {
+                "command": ""
+            },
+            "linux": {
+                "command": ""
+            },
             "dependsOn": [
                 "Выпуск: собрать"
             ],
@@ -170,18 +169,24 @@
         {
             "type": "shell",
             "label": "Запустить",
-            "command": "Rudiron Programmer",
-            "options": {
-                "cwd": "${workspaceFolder}"
+            "command": "",
+            "windows": {
+                "command": "${userHome}/AppData/Local/Arduino15/packages/Rudiron/tools/Rudiron Programmer/default/Rudiron Programmer",
+                "args": [
+                    "${userHome}/AppData/Local/Arduino15/packages/Rudiron/hardware/MDR32F9Qx/2.1.0/bootloaders/bootloader_default.hex",
+                    "build/Sketch.hex",
+                    "--english",
+                    "--run",
+                    "--speed",
+                    "8"
+                ]
             },
-            "args": [
-                "${env:Arduino_Core_Rudiron}/bootloaders/bootloader_default.hex",
-                "build/Sketch.hex",
-                "--english",
-                "--run",
-                "--speed",
-                "0",
-            ],
+            "osx": {
+                "command": ""
+            },
+            "linux": {
+                "command": ""
+            },
             "group": "none",
             "problemMatcher": [],
             "presentation": {

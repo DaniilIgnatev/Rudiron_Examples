@@ -1,49 +1,77 @@
-# This file is part of Arduino_Core_Rudiron.
+# This file is part of Arduino_Core_Rudiron_MDR32F9Qx.
 
-# Arduino_Core_Rudiron is free software: you can redistribute it and/or modify
+# Arduino_Core_Rudiron_MDR32F9Qx is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 
-# Arduino_Core_Rudiron is distributed in the hope that it will be useful,
+# Arduino_Core_Rudiron_MDR32F9Qx is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
+# along with Arduino_Core_Rudiron_MDR32F9Qx. If not, see <https://www.gnu.org/licenses/>.
+
+# Author: Daniil Ignatev
+
 
 cmake_minimum_required(VERSION 3.15.3)
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 
 
-# Задание конфигурации платы
-set(platform "MDR32F9Qx")
-set(board_name "Rudiron_Buterbrod_R9_16MHz")
-set(f_cpu "64000000")
+set(platform "MDR32F9Qx")# Аппаратная платформа
+set(board_name "Rudiron_Buterbrod_R9_20MHz")# Модель платы
+set(f_cpu "64000000")# Максимальная частота процессора
+
+
+# Определение пути до Arduino15
+if(WIN32)
+    set(ARDUINO15_DIR "$ENV{USERPROFILE}/AppData/Local/Arduino15")
+elseif(APPLE)
+    set(ARDUINO15_DIR "$ENV{HOME}/Library/Arduino15")
+else()
+    set(ARDUINO15_DIR "$ENV{HOME}/.arduino15")
+endif()
+string(REPLACE "\\" "/" ARDUINO15_DIR ${ARDUINO15_DIR})
+message(STATUS "Arduino15 directory: ${ARDUINO15_DIR}")
 
 
 # Генератор проекта
 set(CMAKE_GENERATOR "Ninja")
+set(CMAKE_MAKE_PROGRAM "${ARDUINO15_DIR}/packages/Rudiron/tools/ninja/default/ninja" CACHE FILEPATH "Path to Ninja executable")
 #set (CMAKE_GENERATOR "Unix Makefiles" CACHE INTERNAL "" FORCE)
-message("Generator is set to ${CMAKE_GENERATOR}")
+message("Generator is set to ${CMAKE_GENERATOR}, located in ${CMAKE_MAKE_PROGRAM}")
 
+# Определение пути до последней версии ARDUIRON_CORE_RUDIRON_MDR32F9Qx
+set(VERSIONS_DIR "${ARDUINO15_DIR}/packages/Rudiron/hardware/MDR32F9Qx")
+file(GLOB VERSIONS RELATIVE ${VERSIONS_DIR} "${VERSIONS_DIR}/*")
 
-# Определение пути до библиотеки
-set(ARDUIRON_CORE_RUDIRON $ENV{Arduino_Core_Rudiron})
+foreach(version ${VERSIONS})
+    if(NOT IS_DIRECTORY "${VERSIONS_DIR}/${version}")
+        list(REMOVE_ITEM VERSIONS ${version})
+    elseif(NOT version MATCHES "^[0-9]+\\.[0-9]+\\.[0-9]+$")
+        list(REMOVE_ITEM VERSIONS ${version})
+    endif()
+endforeach()
 
-if(ARDUIRON_CORE_RUDIRON STREQUAL "")
-    message("Arduino_Core_Rudiron NOT FOUND. SPECIFY THE FULL PATH!")
-    #при необходимости укажите полный путь к Arduino_Core_Rudiron
-    set(ARDUIRON_CORE_RUDIRON "/../Arduino_Core_Rudiron")
+list(SORT VERSIONS)
+list(GET VERSIONS -1 LATEST_VERSION)
+message("Latest version directory: ${LATEST_VERSION}")
+
+set(ARDUIRON_CORE_RUDIRON_MDR32F9Qx "${VERSIONS_DIR}/${LATEST_VERSION}")
+if(ARDUIRON_CORE_RUDIRON_MDR32F9Qx STREQUAL "")
+    message("Arduino_Core_Rudiron_MDR32F9Qx NOT FOUND. SPECIFY THE FULL PATH!")
+    #при необходимости укажите полный путь к Arduino_Core_Rudiron_MDR32F9Qx
+    set(ARDUIRON_CORE_RUDIRON_MDR32F9Qx "/../Arduino_Core_Rudiron_MDR32F9Qx")
 endif ()
 
-string(REPLACE "\\" "/" ARDUIRON_CORE_RUDIRON "${ARDUIRON_CORE_RUDIRON}")
-message(STATUS "ARDUIRON_CORE_RUDIRON PATH = ${ARDUIRON_CORE_RUDIRON}")
+string(REPLACE "\\" "/" ARDUIRON_CORE_RUDIRON_MDR32F9Qx "${ARDUIRON_CORE_RUDIRON_MDR32F9Qx}")
+message(STATUS "ARDUIRON_CORE_RUDIRON_MDR32F9Qx PATH = ${ARDUIRON_CORE_RUDIRON_MDR32F9Qx}")
 
 
 # Компилятор
-set(CMAKE_TOOLCHAIN_FILE "${ARDUIRON_CORE_RUDIRON}/arm-none-eabi-gcc.cmake")
+set(CMAKE_TOOLCHAIN_FILE "${ARDUIRON_CORE_RUDIRON_MDR32F9Qx}/arm-none-eabi-gcc.cmake")
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
@@ -62,7 +90,7 @@ endif()
 
 
 # Стандартные пути core
-set(core_path "${ARDUIRON_CORE_RUDIRON}/cores/arduino")
+set(core_path "${ARDUIRON_CORE_RUDIRON_MDR32F9Qx}/cores/arduino")
 set(core_path_rudiron "${core_path}/rudiron")
 set(core_path_system "${core_path}/system")
 set(core_path_system_CMSIS_Source "${core_path_system}/CMSIS/Source")
@@ -94,7 +122,7 @@ set(core_includes
 )
 
 # Стандартные пути variant
-set(variant_path "${ARDUIRON_CORE_RUDIRON}/variants/${board_name}")
+set(variant_path "${ARDUIRON_CORE_RUDIRON_MDR32F9Qx}/variants/${board_name}")
 
 # Перечень исходных файлов variant
 file(GLOB_RECURSE variant_sources
@@ -111,7 +139,7 @@ set(variant_includes
 set(LINKER_FILE "${core_path_system}/linker_scripts/${platform}.ld")
 
 # Путь до корневой папки библиотек
-set(libraries_path "${ARDUIRON_CORE_RUDIRON}/libraries")
+set(libraries_path "${ARDUIRON_CORE_RUDIRON_MDR32F9Qx}/libraries")
 
 
 # Подключение запрошенных библиотек
@@ -194,7 +222,6 @@ target_compile_options(${OUTPUT_NAME} PRIVATE
         "-D__STARTUP_CLEAR_BSS"# clear bss bytes
         "-D_start=main"# entry point
         "-pipe"# GCC uses pipes instead of temporary files to communicate between the various stages of the compilation
-        "-std=c++11"# c++ standart
         "-fno-exceptions"# to disable exception handling in C++ programs
         # "-fno-threadsafe-statics"# tells the compiler not to generate the extra code required to ensure that the local static variable initialization is thread-safe
         "-DUSE_${platform}"# arduino platform name
@@ -212,7 +239,7 @@ if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
             )
 else()
     target_compile_options(${OUTPUT_NAME} PRIVATE
-            "-Os"
+            "-O2"
             )
 endif()
 
@@ -231,7 +258,7 @@ target_link_options(${OUTPUT_NAME} PRIVATE
         "-Wl,--gc-sections"
         "-Wl,--unresolved-symbols=report-all"
         "-Wl,--warn-common"
-        "-Wl,--warn-section-align"
+        # "-Wl,--warn-section-align"
         "-ffreestanding"
 )
 

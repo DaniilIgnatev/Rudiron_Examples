@@ -1,5 +1,0 @@
-Adafruit_BusIO
-Adafruit_MPU6050
-Adafruit_Unified_Sensor
-Wire
-SPI
