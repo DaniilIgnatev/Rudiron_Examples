@@ -2,6 +2,7 @@ import os
 import shutil
 import subprocess
 from distutils.dir_util import copy_tree
+from pathlib import Path
 
 
 def clear_cmake_project(project_abs_path: str):
@@ -19,8 +20,20 @@ def _build_cmake_project(project_path: str):
     if not os.path.exists(build_path):
         os.mkdir(build_path)
 
+    cmake_path = "cmake"
+
+    home_path = str(Path.home())
+
+    os_type = platform.system()
+    if os_type == "Windows":
+        cmake_path = home_path + "/AppData/Local/Arduino15/packages/Rudiron/tools/cmake/default/bin/cmake.exe"
+    elif os_type == "Darwin":
+        pass
+    elif os_type == "Linux":
+        pass
+
     cmake_command = [
-        "cmake",
+        cmake_path,
         "-DCMAKE_BUILD_TYPE=Release",
         "-G",
         "Ninja",
@@ -32,7 +45,7 @@ def _build_cmake_project(project_path: str):
     result_code = subprocess.call(cmake_command)
 
     if result_code == 0:
-        cmake_command = ["cmake", "--build", build_path]
+        cmake_command = [cmake_path, "--build", build_path]
         result_code = subprocess.call(cmake_command)
 
     return result_code
