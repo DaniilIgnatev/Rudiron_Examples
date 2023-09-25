@@ -21,7 +21,7 @@ set(CMAKE_VERBOSE_MAKEFILE OFF)
 
 
 set(platform "MDR32F9Qx")# Аппаратная платформа
-set(board_name "Rudiron_Buterbrod_R9_20MHz")# Модель платы
+set(board_name "Rudiron_Buterbrod_R9_16MHz")# Модель платы
 set(f_cpu "64000000")# Максимальная частота процессора
 
 
