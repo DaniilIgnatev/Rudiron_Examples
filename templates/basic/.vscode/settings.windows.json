@@ -1,4 +1,3 @@
 {
-    "cmake.generator": "Ninja",
     "cmake.cmakePath": "${userHome}/AppData/Local/Arduino15/packages/Rudiron/tools/cmake/default/bin/cmake.exe"
 }

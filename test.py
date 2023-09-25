@@ -181,8 +181,8 @@ if __name__ == "__main__":
     traverse_directories(os.curdir, count_project)
     print(f"Found {projects_found} projects\n")
 
-    # traverse_directories(os.curdir, fix_cmakelists)
-    # traverse_directories(os.curdir, fix_vscode)
+    traverse_directories(os.curdir, fix_cmakelists)
+    traverse_directories(os.curdir, fix_vscode)
 
     # print("Started renaming projects")
     # traverse_directories(os.curdir, rename_cpp_sketch)
