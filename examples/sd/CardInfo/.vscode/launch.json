@@ -11,7 +11,7 @@
             "cwd": "${workspaceRoot}",
             "servertype": "openocd",
             "executable": "build-debug/Sketch.elf",
-            "svdFile": "${userHome}/AppData/Local/Arduino15/packages/Rudiron/tools/openocd/default/scripts/MDR32F9Qx.svd",
+            "svdFile": "${userHome}/AppData/Local/Arduino15/packages/Rudiron/tools/openocd/default/openocd/scripts/MDR32F9Qx.svd",
             "configFiles": [
                 "interface/1986be92_jlink.cfg"
             ],

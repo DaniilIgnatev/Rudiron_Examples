@@ -195,28 +195,32 @@ if __name__ == "__main__":
     traverse_directories(os.curdir, count_project)
     print(f"Found {projects_found} projects\n")
 
-    # traverse_directories(os.curdir, fix_cmakelists)
-    # traverse_directories(os.curdir, fix_vscode)
-
     # print("Started renaming projects")
     # traverse_directories(os.curdir, rename_cpp_sketch)
     # print("Ended renaming projects")
 
-    print("Started building cmake projects")
-    traverse_directories(os.curdir, build_cmake_project)
-    print("Ended buildin cmake projects")
+
+    traverse_directories(os.curdir, fix_cmakelists)
+    traverse_directories(os.curdir, fix_vscode)
+
+
+    # print("Started building cmake projects")
+    # traverse_directories(os.curdir, build_cmake_project)
+    # print("Ended buildin cmake projects")
+
+
+    # print("Started generating ino projects")
+    # traverse_directories(os.curdir, generate_ino_project)
+    # print("Ended generating ino projects")
+
+    # print("Started building arduino projects")
+    # traverse_directories(os.curdir, build_ino_project)
+    # print("Ended building arduino projects")
+
 
     print("Started clear cmake projects")
     traverse_directories(os.curdir, clear_cmake_project)
     print("Ended clear cmake projects")
-
-    print("Started generating ino projects")
-    traverse_directories(os.curdir, generate_ino_project)
-    print("Ended generating ino projects")
-
-    print("Started building arduino projects")
-    traverse_directories(os.curdir, build_ino_project)
-    print("Ended building arduino projects")
 
     print("Started clear arduino projects")
     traverse_directories(os.curdir, clear_ino_project)
