@@ -200,8 +200,8 @@ if __name__ == "__main__":
     # print("Ended renaming projects")
 
 
-    traverse_directories(os.curdir, fix_cmakelists)
-    traverse_directories(os.curdir, fix_vscode)
+    # traverse_directories(os.curdir, fix_cmakelists)
+    # traverse_directories(os.curdir, fix_vscode)
 
 
     # print("Started building cmake projects")
