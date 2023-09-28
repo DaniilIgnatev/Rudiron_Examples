@@ -190,38 +190,38 @@ def clear_ino_project(project_abs_path):
     if os.path.exists(path_ino_folder):
         shutil.rmtree(path_ino_folder)
 
-
-if __name__ == "__main__":
+def scan_projects():
     traverse_directories(os.curdir, count_project)
     print(f"Found {projects_found} projects\n")
 
-    # print("Started renaming projects")
-    # traverse_directories(os.curdir, rename_cpp_sketch)
-    # print("Ended renaming projects")
+def propagate_basic_template():
+    traverse_directories(os.curdir, fix_cmakelists)
+    traverse_directories(os.curdir, fix_vscode)
 
-
-    # traverse_directories(os.curdir, fix_cmakelists)
-    # traverse_directories(os.curdir, fix_vscode)
-
-
-    # print("Started building cmake projects")
-    # traverse_directories(os.curdir, build_cmake_project)
-    # print("Ended buildin cmake projects")
-
-
-    # print("Started generating ino projects")
-    # traverse_directories(os.curdir, generate_ino_project)
-    # print("Ended generating ino projects")
-
-    # print("Started building arduino projects")
-    # traverse_directories(os.curdir, build_ino_project)
-    # print("Ended building arduino projects")
-
+def test_cmake():
+    print("Started building cmake projects")
+    traverse_directories(os.curdir, build_cmake_project)
+    print("Ended buildin cmake projects")
 
     print("Started clear cmake projects")
     traverse_directories(os.curdir, clear_cmake_project)
     print("Ended clear cmake projects")
 
+def test_arduino():
+    print("Started generating ino projects")
+    traverse_directories(os.curdir, generate_ino_project)
+    print("Ended generating ino projects")
+
+    print("Started building arduino projects")
+    traverse_directories(os.curdir, build_ino_project)
+    print("Ended building arduino projects")
+
     print("Started clear arduino projects")
     traverse_directories(os.curdir, clear_ino_project)
     print("Ended clear arduino projects")
+
+if __name__ == "__main__":
+    scan_projects()
+    # propagate_basic_template()
+    test_cmake()
+    test_arduino()
