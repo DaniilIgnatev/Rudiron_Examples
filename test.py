@@ -156,9 +156,17 @@ def generate_ino_project(project_abs_path):
     if os.path.exists(path_ino_cpp):
         os.remove(path_ino_cpp)
     
+    path_vscode = os.path.join(path_ino_folder, ".vscode")
+    if os.path.exists(path_vscode):
+        shutil.rmtree(path_vscode)
+    
     path_CMakeLists = os.path.join(path_ino_folder, "CMakeLists.txt")
     if os.path.exists(path_CMakeLists):
         os.remove(path_CMakeLists)
+    
+    path_libraries = os.path.join(path_ino_folder, "libraries.txt")
+    if os.path.exists(path_libraries):
+        os.remove(path_libraries)
 
 
 def build_ino_project(project_abs_path):
@@ -216,9 +224,9 @@ def test_arduino():
     traverse_directories(os.curdir, build_ino_project)
     print("Ended building arduino projects")
 
-    print("Started clear arduino projects")
-    traverse_directories(os.curdir, clear_ino_project)
-    print("Ended clear arduino projects")
+    # print("Started clear arduino projects")
+    # traverse_directories(os.curdir, clear_ino_project)
+    # print("Ended clear arduino projects")
 
 if __name__ == "__main__":
     scan_projects()
