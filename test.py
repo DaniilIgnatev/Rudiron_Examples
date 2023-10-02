@@ -15,6 +15,20 @@ def clear_cmake_project(project_abs_path: str):
     if os.path.exists(build_debug_path):
         shutil.rmtree(build_debug_path)
 
+def __get_arduino_packages_path():
+    """Returns the path to Arduino packages directory"""
+    os_type = platform.system()
+
+    if os_type == "Windows":
+        return os.path.join(os.getenv("LOCALAPPDATA"), "Arduino15", "packages")
+    elif os_type == "Darwin":
+        return os.path.join(
+            os.path.expanduser("~"), "Library", "Arduino15", "packages"
+        )
+    elif os_type == "Linux":
+        return os.path.join(os.path.expanduser("~"), ".arduino15", "packages")
+    else:
+        raise ValueError("Unsupported operating system")
 
 def _build_cmake_project(project_path: str):
     build_path = f"{project_path}/build"
@@ -22,15 +36,8 @@ def _build_cmake_project(project_path: str):
         os.mkdir(build_path)
 
     cmake_path = "cmake"
-    home_path = str(Path.home())
-
-    os_type = platform.system()
-    if os_type == "Windows":
-        cmake_path = home_path + "/AppData/Local/Arduino15/packages/Rudiron/tools/cmake/default/bin/cmake.exe"
-    elif os_type == "Darwin":
-        pass
-    elif os_type == "Linux":
-        pass
+    packages_path = __get_arduino_packages_path()
+    cmake_path = os.path.join(packages_path, "Rudiron/tools/cmake/default/bin/cmake")
 
     cmake_command = [
         cmake_path,
