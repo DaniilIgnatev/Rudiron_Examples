@@ -36,7 +36,7 @@
                 "command": ""
             },
             "linux": {
-                "command": ""
+                "command": "mkdir build; ${userHome}/.arduino15/packages/Rudiron/tools/cmake/default/bin/cmake -DCMAKE_BUILD_TYPE=Release -G \"Ninja\" -S . -B build/; ${userHome}/.arduino15/packages/Rudiron/tools/cmake/default/bin/cmake --build build;"
             },
             "group": {
                 "kind": "build",
@@ -69,7 +69,7 @@
                 "command": ""
             },
             "linux": {
-                "command": ""
+                "command": "mkdir build-debug; ${userHome}/.arduino15/packages/Rudiron/tools/cmake/default/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G \"Ninja\" -S . -B build-debug/; ${userHome}/.arduino15/packages/Rudiron/tools/cmake/default/bin/cmake --build build-debug;"
             },
             "group": {
                 "kind": "build"
@@ -110,7 +110,15 @@
                 "command": ""
             },
             "linux": {
-                "command": ""
+                "command": "${userHome}/.arduino15/packages/Rudiron/tools/Rudiron Programmer/default/Rudiron Programmer",
+                "args": [
+                    "${userHome}/.arduino15/packages/Rudiron/tools/bootloaders/default/MDR32F9Qx_default.hex",
+                    "build/Sketch.hex",
+                    "--verify_bootloader",
+                    "--erase",
+                    "--speed",
+                    "8"
+                ]
             },
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -150,7 +158,16 @@
                 "command": ""
             },
             "linux": {
-                "command": ""
+                "command": "${userHome}/.arduino15/packages/Rudiron/tools/Rudiron Programmer/default/Rudiron Programmer",
+                "args": [
+                    "${userHome}/.arduino15/packages/Rudiron/tools/bootloaders/default/MDR32F9Qx_default.hex",
+                    "build/Sketch.hex",
+                    "--erase",
+                    "--load",
+                    "--run",
+                    "--speed",
+                    "8"
+                ]
             },
             "dependsOn": [
                 "Выпуск: собрать"
@@ -185,7 +202,15 @@
                 "command": ""
             },
             "linux": {
-                "command": ""
+                "command": "${userHome}/.arduino15/packages/Rudiron/tools/Rudiron Programmer/default/Rudiron Programmer",
+                "args": [
+                    "${userHome}/.arduino15/packages/Rudiron/tools/bootloaders/default/MDR32F9Qx_default.hex",
+                    "build/Sketch.hex",
+                    "--english",
+                    "--run",
+                    "--speed",
+                    "8"
+                ]
             },
             "group": "none",
             "problemMatcher": [],

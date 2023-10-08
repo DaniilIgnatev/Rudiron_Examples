@@ -2,7 +2,6 @@ import os
 import platform
 import shutil
 import subprocess
-from distutils.dir_util import copy_tree
 from pathlib import Path
 
 
@@ -126,7 +125,7 @@ def fix_vscode(project_abs_path):
     if os.path.exists(vscode_path):
         shutil.rmtree(vscode_path)
     
-    copy_tree(reference_vscode, vscode_path)
+    shutil.copytree(reference_vscode, vscode_path)
 
 
 def rename_cpp_sketch(project_abs_path):
@@ -237,6 +236,6 @@ def test_arduino():
 
 if __name__ == "__main__":
     scan_projects()
-    # propagate_basic_template()
-    test_cmake()
-    test_arduino()
+    propagate_basic_template()
+    # test_cmake()
+    # test_arduino()
