@@ -215,27 +215,29 @@ def propagate_basic_template():
 def test_cmake():
     print("Started building cmake projects")
     traverse_directories(os.curdir, build_cmake_project)
-    print("Ended buildin cmake projects")
+    print("Finished buildin cmake projects")
 
     print("Started clear cmake projects")
     traverse_directories(os.curdir, clear_cmake_project)
-    print("Ended clear cmake projects")
+    print("Finished clear cmake projects")
 
 def test_arduino():
     print("Started generating ino projects")
     traverse_directories(os.curdir, generate_ino_project)
-    print("Ended generating ino projects")
+    print("Finished generating ino projects")
 
     print("Started building arduino projects")
     traverse_directories(os.curdir, build_ino_project)
-    print("Ended building arduino projects")
+    print("Finished building arduino projects")
 
     # print("Started clear arduino projects")
     # traverse_directories(os.curdir, clear_ino_project)
-    # print("Ended clear arduino projects")
+    # print("Finished clear arduino projects")
 
 if __name__ == "__main__":
     scan_projects()
+
     propagate_basic_template()
-    # test_cmake()
-    # test_arduino()
+
+    test_cmake()
+    test_arduino()
