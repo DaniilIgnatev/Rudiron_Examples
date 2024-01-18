@@ -56,7 +56,7 @@ void loop() {
     freq_last_s = time_s;
   }
 
-  delayMicroseconds(150);
+  delayMicroseconds(200);
 
   if (time_ms % 1000 == 0){
     Serial.println(freq);

@@ -11,26 +11,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "openocd_linux",
+            "name": "openocd",
             "request": "launch",
             "type": "cortex-debug",
             "cwd": "${workspaceRoot}",
             "servertype": "openocd",
             "executable": "build-debug/Sketch.elf",
             "svdFile": "${userHome}/.arduino15/packages/Rudiron/tools/openocd/default/openocd/scripts/MDR32F9Qx.svd",
-            "configFiles": [
-                "interface/1986be92_jlink.cfg"
-            ],
-            "preLaunchTask": "Отладка: собрать",
-        },
-        {
-            "name": "openocd_windows",
-            "request": "launch",
-            "type": "cortex-debug",
-            "cwd": "${workspaceRoot}",
-            "servertype": "openocd",
-            "executable": "build-debug/Sketch.elf",
-            "svdFile": "${userHome}/AppData/Local/Arduino15/packages/Rudiron/tools/openocd/default/openocd/scripts/MDR32F9Qx.svd",
             "configFiles": [
                 "interface/1986be92_jlink.cfg"
             ],
