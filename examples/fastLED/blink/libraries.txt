@@ -1,1 +1,3 @@
-FastLED
+FastLED/src
+FastLED/src/lib8tion
+FastLED/src/platforms/arm/MDR32F9Qx
