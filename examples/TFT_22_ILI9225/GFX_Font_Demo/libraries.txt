@@ -1,0 +1,5 @@
+Wire
+SPI
+Adafruit_BusIO
+TFT_22_ILI9225/fonts
+TFT_22_ILI9225/src
