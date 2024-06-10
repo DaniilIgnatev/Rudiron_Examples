@@ -202,6 +202,7 @@ include_directories(
 target_compile_definitions(${OUTPUT_NAME} PUBLIC
         # USB_IRQ -- включает обработчик прерывания USB
         # HCLK_DISABLE -- работа от внутреннего кварцевого резонатора
+        PROGMEM=
         )
 
 # Параметры компиляции
