@@ -1,6 +1,6 @@
 #include "Arduino.h"
 #include "Adafruit_ST7735.h"
-#include "fonts/FreeSans9pt7b.h"
+#include "Fonts/FreeSans9pt7b.h"
 #include "nrf24.h"
 #include "rudiron/adc.h"
 
