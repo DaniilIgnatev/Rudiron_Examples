@@ -110,15 +110,17 @@ void scrollText(String text, int direction)
 float last_temperature = 0;
 
 void displayTemperature(float temperature){
-    tft.setCursor(tft.width() / 2 - tft.width() / 4, tft.height() / 2);
+    tft.setCursor(tft.width() / 2 - tft.width() / 3, tft.height() / 2);
     tft.setTextColor(background_color);
-    tft.print("T=");
-    tft.print(last_temperature);
+    tft.print("Temp ~ ");
+    tft.print(last_temperature, 0);
+    tft.print("C");
 
-    tft.setCursor(tft.width() / 2 - tft.width() / 4, tft.height() / 2);
+    tft.setCursor(tft.width() / 2 - tft.width() / 3, tft.height() / 2);
     tft.setTextColor(red_color);
-    tft.print("T=");
-    tft.print(temperature);
+    tft.print("Temp ~ ");
+    tft.print(temperature, 0);
+    tft.print("C");
 
     last_temperature = temperature;
 
@@ -141,6 +143,8 @@ void displayAngles(int x, int y, int z){
     last_x = x;
     last_y = y;
     last_z = z;
+
+    delay(100);
 }
 
 /// Первая кнопка нажата
@@ -193,7 +197,7 @@ void loop()
         result.channel = ADC_ChannelName::ADC_Channel_0;
         result.value = temp_raw;
         temperature = ADC::temperature_raw_to_celsius(result);
-        temperature = (float)((int)(temperature * 100)) / 100;
+        temperature = (float)((int)(temperature * 10)) / 10;
 
         x = (signed char)rx_buffer[6];
         y = (signed char)rx_buffer[7];
